@@ -248,3 +248,38 @@ export default App;
 - `React.FC`는 별로 좋지 않다.
 - 함수형 컴포넌트를 작성할 때는 화살표 함수로 작성해도 되고, `function`키워드를 사용해도 된다.
 - Props에 대한 타입을 선언할 땐 `interface` 또는 `type`을 사용하면 되며, 프로젝트 내부에서 일관성만 지키면 된다.
+
+# useState 및 이벤트 관리
+
+타입스크립트 환경에서 `useState`를 사용하는 방법과 이벤트를 다루는 방법을 배워봅시다.
+
+타입스크립트 없이 리액트 컴포넌트를 작성하는 것과 별반 차이가 없습니다. `useState` 를 사용하실때 `useState<number>()` 와 같이 Generics 를 사용하여 해당 상태가 어떤 타입을 가지고 있을지 설정만 해주시면 됩니다.
+
+> **참고:** `useState`를 사용 할 때 Generics 를 사용하지 않아도 알아서 타입을 유추하기 때문에 생략해도 상관없습니다.
+
+![image](https://user-images.githubusercontent.com/42956032/66927272-7b755f00-f06a-11e9-979e-9c91ee3e4924.png)
+
+그렇다면 `useState` 를 사용 할 때 어떤 상황에 Generics 를 사용하는게 좋을까요?
+
+바로, 상태가 `null`일 수도 있고 아닐수도 있을 때 Generics 를 활용하시면 좋습니다.
+
+```ts
+type Information = { name: string; description: string };
+const [info, setInformation] = useState<Information | null>(null);
+```
+
+추가적으로 상태의 타입이 까다로운 구조를 가진 객체이거나 배열일 때는 Generics 를 명시하는 것이 좋습니다.
+
+```ts
+type Todo = { id: number; text: string; done: boolean };
+const [todos, setTodos] = useState<Todo[]>([]);
+```
+
+배열인 경우에는 위와 같이 빈 배열만 넣었을 때 해당 배열이 어떤 타입으로 이루어진 배열인지 추론 할 수 없기 때문에 Generics 를 명시하셔야 합니다. 만약 Generics 를 사용하지 않는다면 다음과 같이 할 수도 있긴 하지만 코드가 별로 예쁘지 않습니다.
+
+```ts
+type Todo = { id: number; text: string; done: boolean };
+const [todos, setTodos] = useState([] as Todo[]);
+```
+
+여기서 사용된 `as` 는 [Type Assertion](https://www.typescriptlang.org/docs/handbook/basic-types.html#type-assertions) 이라는 문법인데요, 특정 값이 특정 타입이다라는 정보를 덮어 쓸 수 있는 문법입니다.
