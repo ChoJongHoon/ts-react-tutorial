@@ -188,3 +188,63 @@ export default Greetings;
 ```
 
 화살표 함수를 쓸 지, `function` 키워드를 사용해서 선언을 할 지는 여러분의 자유입니다! 다만, `React.FC` 의 사용은 아직까지는 저는 권장하지 않습니다. 언젠간 이 이슈가 해결되리라 생각합니다.
+
+## 컴포넌트에서 함수 타입의 props 받아오기
+
+만약 이 컴포넌트에서 특정 함수를 props로 받아와야 한다면 다음과 같이 타입을 지정할 수 있답니다.
+
+**src/Greeting.tsx**
+
+```tsx
+import React from "react";
+
+type GreetingsProps = {
+  name: string;
+  mark: string;
+  optional?: string;
+  onClick: (name: string) => void; // 아무것도 리턴하지 않는다는 함수를 의미합니다.
+};
+
+function Greetings({ name, mark, optional, onClick }: GreetingsProps) {
+  const handleClick = () => onClick(name);
+  return (
+    <div>
+      Hello, {name} {mark}
+      {optional && <p>{optional}</p>}
+      <div>
+        <button onClick={handleClick}>Click Me</button>
+      </div>
+    </div>
+  );
+}
+
+Greetings.defaultProps = {
+  mark: "!"
+};
+
+export default Greetings;
+```
+
+**src/App.js**
+
+```tsx
+import React from "react";
+import Greetings from "./Greetings";
+
+const App: React.FC = () => {
+  const onClick = (name: string) => {
+    console.log(`${name} says hello`);
+  };
+  return <Greetings name="Hello" onClick={onClick} />;
+};
+
+export default App;
+```
+
+![image](https://user-images.githubusercontent.com/42956032/66925958-28021180-f068-11e9-8e35-ae24dce1a65a.png)
+
+# 정리
+
+- `React.FC`는 별로 좋지 않다.
+- 함수형 컴포넌트를 작성할 때는 화살표 함수로 작성해도 되고, `function`키워드를 사용해도 된다.
+- Props에 대한 타입을 선언할 땐 `interface` 또는 `type`을 사용하면 되며, 프로젝트 내부에서 일관성만 지키면 된다.
