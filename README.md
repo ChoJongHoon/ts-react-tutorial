@@ -257,6 +257,31 @@ export default App;
 
 타입스크립트 환경에서 `useState`를 사용하는 방법과 이벤트를 다루는 방법을 배워봅시다.
 
+### 카운터 만들기
+
+**src/Counter.tsx**
+
+```tsx
+import React, { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState<number>(0);
+  const onIncrease = () => setCount(count + 1);
+  const onDecrease = () => setCount(count - 1);
+  return (
+    <div>
+      <h1>{count}</h1>
+      <div>
+        <button onClick={onIncrease}>+1</button>
+        <button onClick={onDecrease}>-1</button>
+      </div>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
 타입스크립트 없이 리액트 컴포넌트를 작성하는 것과 별반 차이가 없습니다. `useState` 를 사용하실때 `useState<number>()` 와 같이 Generics 를 사용하여 해당 상태가 어떤 타입을 가지고 있을지 설정만 해주시면 됩니다.
 
 > **참고:** `useState`를 사용 할 때 Generics 를 사용하지 않아도 알아서 타입을 유추하기 때문에 생략해도 상관없습니다.
@@ -288,7 +313,7 @@ const [todos, setTodos] = useState([] as Todo[]);
 
 여기서 사용된 `as` 는 [Type Assertion](https://www.typescriptlang.org/docs/handbook/basic-types.html#type-assertions) 이라는 문법인데요, 특정 값이 특정 타입이다라는 정보를 덮어 쓸 수 있는 문법입니다.
 
-## 인풋 상태 관리하기
+### 인풋 상태 관리하기
 
 이번에는 인풋의 상태를 관리하는 방법을 다뤄보도록 하겠습니다. 이벤트를 다뤄야 하기 때문에 타입을 지정하는것이 처음엔 어떻게 해야 할지 헷갈릴수도 있을텐데, 한번 어떻게하는지 알고나면 매우 쉽습니다.
 
@@ -297,3 +322,56 @@ const [todos, setTodos] = useState([] as Todo[]);
 여기서 `e` 객체의 타입이 무엇일지, 타입스크립트를 처음 쓰는 사람이라면 모르실겁니다. 그렇다고 해서 구글에 "TypeScript react onChange event" 라고 검색하실 필요는 없습니다! `e` 객체의 타입이 무엇인지 외우실 필요도 없습니다. 그냥 커서를 `onChange` 에 올려보세요.
 
 커서를 올리면 어떤 타입을 사용해야하는지 알려줍니다. 그러면 그냥 마우스로 드래그해서 복사하시면 됩니다. (마우스 커서가 박스 밖으로 나가지 않게 조심히 움직이셔야 합니다)
+
+## useReducer
+
+타입스크립트 환경에서 `useReducer` 를 사용 할 때에는 코드를 어떻게 준비해줘야 하는지 알아봅시다.
+
+### 카운터를 `useReducer` 로 다시 구현하기
+
+우리가 아까 만들었던 Counter 컴포넌트를 `useState` 가 아닌 `useReducer` 로 사용하는 코드로 전환해보도록 하겠습니다.
+
+**src/Counter.tsx**
+
+```tsx
+import React, { useReducer } from "react";
+
+type Action = { type: "INCREASE" } | { type: "DECREASE" }; // 이렇게 액션을 | 으로 연달아서 쭉 나열하세요.
+
+function reducer(state: number, action: Action): number {
+  switch (action.type) {
+    case "INCREASE":
+      return state + 1;
+    case "DECREASE":
+      return state - 1;
+    default:
+      throw new Error("Unhandled action");
+  }
+}
+
+function Counter() {
+  const [count, dispatch] = useReducer(reducer, 0);
+  const onIncrease = () => dispatch({ type: "INCREASE" });
+  const onDecrease = () => dispatch({ type: "DECREASE" });
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <div>
+        <button onClick={onIncrease}>+1</button>
+        <button onClick={onDecrease}>-1</button>
+      </div>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+위 코드에 있는 `reducer` 함수의 맨 윗줄을 확인해봅시다.
+
+```tsx
+function reducer(state: number, action: Action): number;
+```
+
+보시면, `state`의 타입과 함수의 리턴 타입이 동일하지요? 리듀서를 만들 땐 이렇게 파라미터로 받아오는 상태의 타입과 함수가 리턴하는 타입을 동일하게 하는 것이 매우 중요합니다. 이렇게 리턴 타입을 상태와 동일한 타입으로 설정함으로써 실수들을 방지 할 수 있습니다. (예: 특정 케이스에 결과값을 반환하지 않았거나, 상태의 타입이 바뀌게 되었을 경우 에러를 감지해낼 수 있습니다.)
