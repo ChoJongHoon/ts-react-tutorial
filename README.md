@@ -249,7 +249,11 @@ export default App;
 - 함수형 컴포넌트를 작성할 때는 화살표 함수로 작성해도 되고, `function`키워드를 사용해도 된다.
 - Props에 대한 타입을 선언할 땐 `interface` 또는 `type`을 사용하면 되며, 프로젝트 내부에서 일관성만 지키면 된다.
 
-# useState 및 이벤트 관리
+# 타입스크립트로 리액트 Hooks 사용하기 (useState, useReducer, useRef)
+
+이번 섹션에서는 타입스크립트를 사용하는 리액트 컴포넌트에서 `useState` 및 `useReducer` 를 사용하여 컴포넌트의 상태를 관리하는 방법과 `useRef` 를 사용하여 컴포넌트 내부에서 관리하는 변수 및 DOM 을 이용하는 방법에 대해서 알아보겠습니다.
+
+## useState 및 이벤트 관리
 
 타입스크립트 환경에서 `useState`를 사용하는 방법과 이벤트를 다루는 방법을 배워봅시다.
 
@@ -283,3 +287,13 @@ const [todos, setTodos] = useState([] as Todo[]);
 ```
 
 여기서 사용된 `as` 는 [Type Assertion](https://www.typescriptlang.org/docs/handbook/basic-types.html#type-assertions) 이라는 문법인데요, 특정 값이 특정 타입이다라는 정보를 덮어 쓸 수 있는 문법입니다.
+
+## 인풋 상태 관리하기
+
+이번에는 인풋의 상태를 관리하는 방법을 다뤄보도록 하겠습니다. 이벤트를 다뤄야 하기 때문에 타입을 지정하는것이 처음엔 어떻게 해야 할지 헷갈릴수도 있을텐데, 한번 어떻게하는지 알고나면 매우 쉽습니다.
+
+![image](https://user-images.githubusercontent.com/42956032/66976622-87e6cf80-f0dd-11e9-9dad-e315a44f1311.png)
+
+여기서 `e` 객체의 타입이 무엇일지, 타입스크립트를 처음 쓰는 사람이라면 모르실겁니다. 그렇다고 해서 구글에 "TypeScript react onChange event" 라고 검색하실 필요는 없습니다! `e` 객체의 타입이 무엇인지 외우실 필요도 없습니다. 그냥 커서를 `onChange` 에 올려보세요.
+
+커서를 올리면 어떤 타입을 사용해야하는지 알려줍니다. 그러면 그냥 마우스로 드래그해서 복사하시면 됩니다. (마우스 커서가 박스 밖으로 나가지 않게 조심히 움직이셔야 합니다)
