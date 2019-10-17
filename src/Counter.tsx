@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 
 type Action = { type: "INCREASE" } | { type: "DECREASE" };
 // 이렇게 액션을 | 으로 연달아서 쭉 나열하세요.

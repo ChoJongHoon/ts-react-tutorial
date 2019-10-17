@@ -375,3 +375,97 @@ function reducer(state: number, action: Action): number;
 ```
 
 보시면, `state`의 타입과 함수의 리턴 타입이 동일하지요? 리듀서를 만들 땐 이렇게 파라미터로 받아오는 상태의 타입과 함수가 리턴하는 타입을 동일하게 하는 것이 매우 중요합니다. 이렇게 리턴 타입을 상태와 동일한 타입으로 설정함으로써 실수들을 방지 할 수 있습니다. (예: 특정 케이스에 결과값을 반환하지 않았거나, 상태의 타입이 바뀌게 되었을 경우 에러를 감지해낼 수 있습니다.)
+
+### ReducerSample 구현하기
+
+자동완성이 되는 것과 타입검사가 되는 것을 직접 확인해보기 위하여 ReducerSample 라는 컴포넌트를 만들어보도록 하겠습니다. src 디렉터리에 ReducerSample.tsx 라는 파일을 생성하고, 다음 코드를 쭉 따라서 작성해보세요. 코드를 작성하는 과정에서 코드가 자동완성이 되는 것도 볼 수 있을 것이고, 만약에 필요한 값을 빠뜨리면 에러가 발생 하는 것도 보실 수 있을 것입니다.
+
+**src/ReducerSample.tsx**
+
+```tsx
+import React, { useReducer } from "react";
+
+type Color = "red" | "orange" | "yellow";
+
+type State = {
+  count: number;
+  text: string;
+  color: Color;
+  isGood: boolean;
+};
+
+type Action =
+  | { type: "SET_COUNT"; count: number }
+  | { type: "SET_TEXT"; text: string }
+  | { type: "SET_COLOR"; color: Color }
+  | { type: "TOGGLE_GOOD" };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "SET_COUNT":
+      return {
+        ...state,
+        count: action.count // count가 자동완성되며, number 타입인걸 알 수 있습니다.
+      };
+    case "SET_TEXT":
+      return {
+        ...state,
+        text: action.text
+      };
+    case "SET_COLOR":
+      return {
+        ...state,
+        color: action.color
+      };
+    case "TOGGLE_GOOD":
+      return {
+        ...state,
+        isGood: !state.isGood
+      };
+    default:
+      throw new Error("Unhandled action");
+  }
+}
+
+export default function ReducerSample() {
+  const [state, dispatch] = useReducer(reducer, {
+    count: 0,
+    text: "hello",
+    color: "red",
+    isGood: true
+  });
+
+  const setCount = () => dispatch({ type: "SET_COUNT", count: 5 }); // count를 넣지 않으면 에러 발생
+  const setText = () => dispatch({ type: "SET_TEXT", text: "bye" }); // text를 넣지 않으면 에러 발생
+  const setColor = () => dispatch({ type: "SET_COLOR", color: "orange" }); // count를 넣지 않으면 에러 발생
+  const toggleGood = () => dispatch({ type: "TOGGLE_GOOD" }); // count를 넣지 않으면 에러 발생
+  return (
+    <div>
+      <p>
+        <code>count: </code> {state.count}
+      </p>
+      <p>
+        <code>text: </code> {state.text}
+      </p>
+      <p>
+        <code>color: </code> {state.color}
+      </p>
+      <p>
+        <code>isGood: </code> {state.isGood ? "true" : "false"}
+      </p>
+      <div>
+        <button onClick={setCount}>SET_COUNT</button>
+        <button onClick={setText}>SET_TEXT</button>
+        <button onClick={setColor}>SET_COLOR</button>
+        <button onClick={toggleGood}>TOGGLE_GOOD</button>
+      </div>
+    </div>
+  );
+}
+```
+
+이렇게, 상태값이 객체로 이루어져 있고 안에 여러 타입의 값이 들어 있다면 위 코드에서 `State` 라는 타입을 만들었듯이 이에 대한 타입을 준비해주시면 좋습니다.
+
+이번에 다룬 액션들은 `type`값만 있는 것이 아니라 `count`, `text`, `color` 같은 추가적인 값이 있습니다. 이러한 상황에서 `Action`이라는 타입스크립트 타입을 정의함으로써 리듀서에서 자동완성이 되어 개발에 편의성을 더해주고, 액션을 디스패치하게 될 때에도 액션에 대한 타입검사가 이루어지므로 사소한 실수를 사전에 방지 할 수 있답니다.
+
+![image](https://user-images.githubusercontent.com/42956032/66983911-a3110980-f0f4-11e9-81b7-a82ea70b0b7b.png)
