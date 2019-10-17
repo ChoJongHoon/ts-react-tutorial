@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.js": "/github.io/ts-react-tutorial/static/js/main.05cb0852.chunk.js",
+    "main.js.map": "/github.io/ts-react-tutorial/static/js/main.05cb0852.chunk.js.map",
+    "runtime-main.js": "/github.io/ts-react-tutorial/static/js/runtime-main.69a4452d.js",
+    "runtime-main.js.map": "/github.io/ts-react-tutorial/static/js/runtime-main.69a4452d.js.map",
+    "static/js/2.8f153761.chunk.js": "/github.io/ts-react-tutorial/static/js/2.8f153761.chunk.js",
+    "static/js/2.8f153761.chunk.js.map": "/github.io/ts-react-tutorial/static/js/2.8f153761.chunk.js.map",
+    "index.html": "/github.io/ts-react-tutorial/index.html",
+    "precache-manifest.55fcf44f638767db62ab272e23f7edd5.js": "/github.io/ts-react-tutorial/precache-manifest.55fcf44f638767db62ab272e23f7edd5.js",
+    "service-worker.js": "/github.io/ts-react-tutorial/service-worker.js"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.69a4452d.js",
+    "static/js/2.8f153761.chunk.js",
+    "static/js/main.05cb0852.chunk.js"
+  ]
+}
