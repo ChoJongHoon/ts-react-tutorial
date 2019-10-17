@@ -1,6 +1,6 @@
 # ts-react-tutorial
 
-[velpert](https://velog.io/@velopert)님의 [리액트 컴포넌트 타입스크립트로 작성하기](https://velog.io/@velopert/create-typescript-react-component) 실습
+[velpert](https://velog.io/@velopert)님의 [리액트 컴포넌트 타입스크립트로 작성하기](https://velog.io/@velopert/create-typescript-react-component), [타입스크립트로 리액트 Hooks 사용하기 (useState, useReducer, useRe)](http://velog.io/@velopert/using-hooks-with-typescript) 실습
 
 # 프로젝트 생성
 
